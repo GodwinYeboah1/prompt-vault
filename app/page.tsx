@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import type { Prompt } from "@/lib/types";
 import { PromptForm } from "@/app/prompt-form";
@@ -20,6 +21,35 @@ export default function Home({ searchParams }: PageProps<"/">) {
   );
 }
 
+// The real error is only logged on the server; visitors see a generic message.
+async function loadPrompts(): Promise<{
+  prompts: Prompt[];
+  loadFailed: boolean;
+}> {
+  // Only query for real requests. Without this, Next.js can start the query
+  // while prerendering, cut it off, and we'd log that as a database error.
+  await connection();
+
+  try {
+    const { data, error } = await getSupabase()
+      .from("prompts")
+      .select("id, title, body, tags, favorite, created_at")
+      .order("favorite", { ascending: false })
+      .order("created_at", { ascending: false })
+      .returns<Prompt[]>();
+
+    if (error) {
+      console.error("Failed to load prompts:", error);
+      return { prompts: [], loadFailed: true };
+    }
+    return { prompts: data, loadFailed: false };
+  } catch (error) {
+    // e.g. missing SUPABASE_URL / SUPABASE_SECRET_KEY
+    console.error("Failed to load prompts:", error);
+    return { prompts: [], loadFailed: true };
+  }
+}
+
 async function Vault({
   searchParams,
 }: {
@@ -28,14 +58,7 @@ async function Vault({
   // Reading the URL also makes this render fresh on every request.
   const { edit } = await searchParams;
 
-  const { data, error } = await getSupabase()
-    .from("prompts")
-    .select("id, title, body, tags, favorite, created_at")
-    .order("favorite", { ascending: false })
-    .order("created_at", { ascending: false })
-    .returns<Prompt[]>();
-
-  const prompts = data ?? [];
+  const { prompts, loadFailed } = await loadPrompts();
   // `/?edit=12` opens prompt 12 in the form.
   const editing = prompts.find((prompt) => String(prompt.id) === edit);
 
@@ -43,11 +66,14 @@ async function Vault({
     <>
       {/* Only the prompt rows are sent to the browser; the Supabase client and
           secret key stay on the server. */}
-      <CommandPalette prompts={prompts} />
+      <CommandPalette prompts={prompts} loadFailed={loadFailed} />
       <PromptForm key={editing?.id ?? "new"} editing={editing} />
-      {error ? (
-        <p className="text-red-400">
-          Couldn&apos;t load prompts: {error.message}
+      {loadFailed ? (
+        <p
+          role="alert"
+          className="rounded-lg border border-red-400/50 bg-red-950/30 px-4 py-3 text-red-300 shadow-[0_0_12px_rgba(248,113,113,0.25)]"
+        >
+          Couldn&apos;t connect to the database. Please try again in a moment.
         </p>
       ) : prompts.length === 0 ? (
         <p className="text-zinc-500">No prompts yet.</p>

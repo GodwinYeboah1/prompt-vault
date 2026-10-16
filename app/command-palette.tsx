@@ -53,7 +53,13 @@ function useIsMac() {
   );
 }
 
-export function CommandPalette({ prompts }: { prompts: Prompt[] }) {
+export function CommandPalette({
+  prompts,
+  loadFailed,
+}: {
+  prompts: Prompt[];
+  loadFailed: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -182,7 +188,12 @@ export function CommandPalette({ prompts }: { prompts: Prompt[] }) {
           />
         </div>
 
-        {results.length === 0 ? (
+        {loadFailed ? (
+          <p role="alert" className="px-4 py-6 text-center text-sm text-red-400">
+            Couldn&apos;t connect to the database, so there&apos;s nothing to
+            search.
+          </p>
+        ) : results.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm text-zinc-500">
             {prompts.length === 0 ? "No prompts yet." : "No matching prompts."}
           </p>
