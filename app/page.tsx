@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { PromptForm } from "@/app/prompt-form";
 
 type Prompt = {
-  id: string;
+  id: number;
   title: string;
   body: string;
   tags: string[] | null;
@@ -15,9 +16,10 @@ export default function Home() {
   return (
     <main className="flex-1 bg-zinc-950 text-zinc-100">
       <div className="mx-auto max-w-2xl px-6 py-16">
-        <h1 className="mb-8 text-3xl font-semibold tracking-tight">
+        <h1 className="mb-8 font-mono text-3xl font-semibold uppercase tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">
           Prompt Vault
         </h1>
+        <PromptForm />
         <Suspense fallback={<p className="text-zinc-500">Loading prompts…</p>}>
           <PromptList />
         </Suspense>
@@ -51,9 +53,9 @@ async function PromptList() {
       {data.map((prompt) => (
         <li
           key={prompt.id}
-          className="rounded-lg border border-zinc-800 bg-zinc-900 p-5"
+          className="rounded-lg border border-cyan-400/30 bg-zinc-900/60 p-5 shadow-[0_0_12px_rgba(34,211,238,0.12)]"
         >
-          <h2 className="text-lg font-medium">{prompt.title}</h2>
+          <h2 className="text-lg font-medium text-cyan-100">{prompt.title}</h2>
           <p className="mt-2 whitespace-pre-wrap text-zinc-400">
             {prompt.body}
           </p>
