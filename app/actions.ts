@@ -3,6 +3,7 @@
 import { refresh } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
+import { requireSession } from "@/lib/session";
 
 export type SavePromptState = {
   status: "idle" | "success" | "error";
@@ -23,6 +24,7 @@ export async function savePrompt(
   _prevState: SavePromptState,
   formData: FormData,
 ): Promise<SavePromptState> {
+  await requireSession();
   const rawId = formData.get("id");
   const id = rawId ? parseId(rawId) : null;
   const title = String(formData.get("title") ?? "").trim();
@@ -91,6 +93,7 @@ export async function toggleFavorite(
   id: number,
   favorite: boolean,
 ): Promise<ActionResult> {
+  await requireSession();
   if (!parseId(id)) return { error: "That prompt couldn't be found." };
 
   const { error } = await getSupabase()
@@ -108,6 +111,7 @@ export async function toggleFavorite(
 }
 
 export async function deletePrompt(id: number): Promise<ActionResult> {
+  await requireSession();
   if (!parseId(id)) return { error: "That prompt couldn't be found." };
 
   const { error } = await getSupabase().from("prompts").delete().eq("id", id);

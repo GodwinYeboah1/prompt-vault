@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { requireSession } from "@/lib/session";
+import { lock } from "@/app/auth-actions";
 import type { Prompt } from "@/lib/types";
 import { PromptForm } from "@/app/prompt-form";
 import { PromptCard } from "@/app/prompt-card";
@@ -10,9 +12,19 @@ export default function Home({ searchParams }: PageProps<"/">) {
   return (
     <main className="flex-1 bg-zinc-950 text-zinc-100">
       <div className="mx-auto max-w-2xl px-6 py-16">
-        <h1 className="mb-8 font-mono text-3xl font-semibold uppercase tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">
-          Prompt Vault
-        </h1>
+        <header className="mb-8 flex items-center justify-between gap-4">
+          <h1 className="font-mono text-3xl font-semibold uppercase tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">
+            Prompt Vault
+          </h1>
+          <form action={lock}>
+            <button
+              type="submit"
+              className="rounded border border-cyan-400/40 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.2em] text-cyan-200 transition hover:border-cyan-300 hover:shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+            >
+              Lock
+            </button>
+          </form>
+        </header>
         <Suspense fallback={<p className="text-zinc-500">Loading prompts…</p>}>
           <Vault searchParams={searchParams} />
         </Suspense>
@@ -29,6 +41,8 @@ async function loadPrompts(): Promise<{
   // Only query for real requests. Without this, Next.js can start the query
   // while prerendering, cut it off, and we'd log that as a database error.
   await connection();
+  // Outside the try: redirect() works by throwing, so catching it would break it.
+  await requireSession();
 
   try {
     const { data, error } = await getSupabase()
