@@ -3,6 +3,7 @@ import { getSupabase } from "@/lib/supabase";
 import type { Prompt } from "@/lib/types";
 import { PromptForm } from "@/app/prompt-form";
 import { PromptCard } from "@/app/prompt-card";
+import { CommandPalette } from "@/app/command-palette";
 
 export default function Home({ searchParams }: PageProps<"/">) {
   return (
@@ -40,6 +41,9 @@ async function Vault({
 
   return (
     <>
+      {/* Only the prompt rows are sent to the browser; the Supabase client and
+          secret key stay on the server. */}
+      <CommandPalette prompts={prompts} />
       <PromptForm key={editing?.id ?? "new"} editing={editing} />
       {error ? (
         <p className="text-red-400">
