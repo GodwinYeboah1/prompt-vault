@@ -7,6 +7,7 @@ import {
   toggleFavorite,
   type ActionResult,
 } from "@/app/actions";
+import { copyToClipboard } from "@/lib/copy-to-clipboard";
 import type { Prompt } from "@/lib/types";
 
 const buttonClass =
@@ -37,13 +38,12 @@ export function PromptCard({
 
   async function copyBody() {
     try {
-      await navigator.clipboard.writeText(prompt.body);
+      await copyToClipboard(prompt.body);
       setCopied(true);
       clearTimeout(copiedTimer.current);
       copiedTimer.current = setTimeout(() => setCopied(false), 1500);
     } catch {
-      // The clipboard API is only available on https or localhost.
-      setError("Couldn't copy. Your browser blocked clipboard access.");
+      setError("Couldn't copy to the clipboard. Please try again.");
     }
   }
 
