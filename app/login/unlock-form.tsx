@@ -11,25 +11,25 @@ export function UnlockForm() {
   return (
     <form
       action={formAction}
-      className="w-full max-w-sm animate-hud-in rounded-2xl border border-cyan-300/60 bg-zinc-900/50 p-8 text-center shadow-[0_0_40px_rgba(34,211,238,0.25),inset_0_0_30px_rgba(34,211,238,0.06)] backdrop-blur"
+      className="w-full max-w-sm animate-hud-in rounded-2xl border border-gold-400/20 bg-card px-6 py-10 text-center shadow-[0_0_60px_rgb(212_175_55/0.1)] sm:px-8"
     >
       {/* Arc-reactor style rings */}
       <div className="relative mx-auto mb-8 size-28">
-        <div className="absolute inset-0 rounded-full border-2 border-cyan-300/70 shadow-[0_0_24px_rgba(34,211,238,0.6)]" />
-        <div className="absolute inset-3 animate-[spin_8s_linear_infinite] rounded-full border border-dashed border-cyan-300/60" />
+        <div className="absolute inset-0 rounded-full border border-gold-400/50 shadow-[0_0_24px_rgb(212_175_55/0.25)]" />
+        <div className="absolute inset-3 animate-[spin_12s_linear_infinite] rounded-full border border-dashed border-gold-400/35" />
         <div
-          className={`absolute inset-8 rounded-full border shadow-[0_0_18px_rgba(34,211,238,0.8)] transition ${
+          className={`absolute inset-8 rounded-full border transition ${
             state.error
-              ? "border-red-400 bg-red-400/20 shadow-[0_0_18px_rgba(248,113,113,0.8)]"
-              : "border-cyan-200 bg-cyan-300/20"
+              ? "border-red-400/80 bg-red-400/20 shadow-[0_0_20px_rgb(248_113_113/0.5)]"
+              : "border-gold-300/80 bg-gold-400/20 shadow-[0_0_20px_rgb(212_175_55/0.5)]"
           }`}
         />
       </div>
 
-      <h1 className="font-mono text-xl uppercase tracking-[0.35em] text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">
+      <h1 className="text-display text-zinc-50">
         Vault locked
       </h1>
-      <p className="mt-2 font-mono text-xs uppercase tracking-[0.25em] text-zinc-500">
+      <p className="mt-3 text-label uppercase text-zinc-400">
         Identity verification required
       </p>
 
@@ -47,24 +47,24 @@ export function UnlockForm() {
         // Remount after each failed attempt so the field clears and the
         // shake replays.
         key={state.attempt ?? 0}
-        className={`mt-8 w-full rounded-md border bg-zinc-950/80 px-4 py-3 text-center font-mono tracking-[0.3em] text-cyan-100 placeholder:tracking-[0.2em] placeholder:text-zinc-600 outline-none transition focus:shadow-[0_0_16px_rgba(34,211,238,0.55)] ${
+        className={`mt-8 w-full rounded-full border bg-ink px-5 py-3 text-center text-base tracking-[0.3em] text-zinc-100 placeholder:tracking-normal placeholder:text-zinc-500 outline-none transition ${
           state.error
-            ? "animate-shake border-red-400/70"
-            : "border-cyan-400/50 focus:border-cyan-300"
+            ? "animate-shake border-red-400/70 focus:shadow-[0_0_0_4px_rgb(248_113_113/0.12)]"
+            : "border-gold-400/20 focus:border-gold-400/60 focus:shadow-[0_0_0_4px_rgb(212_175_55/0.12),0_0_20px_rgb(212_175_55/0.12)]"
         }`}
       />
 
       <button
         type="submit"
         disabled={pending}
-        className="mt-4 w-full rounded-md border border-cyan-300 bg-cyan-400/10 py-3 font-mono text-sm uppercase tracking-[0.3em] text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.45)] transition hover:bg-cyan-400/20 hover:shadow-[0_0_20px_rgba(34,211,238,0.7)] disabled:cursor-wait disabled:opacity-50"
+        className="mt-3 w-full rounded-full bg-gold-400 py-3 text-caption font-semibold text-black transition hover:bg-gold-300 hover:shadow-[0_0_24px_rgb(212_175_55/0.55)] disabled:cursor-wait disabled:opacity-50"
       >
         {pending ? "Verifying…" : "Unlock"}
       </button>
 
       <p
         aria-live="polite"
-        className="mt-4 min-h-5 font-mono text-sm uppercase tracking-[0.25em] text-red-400"
+        className="mt-4 min-h-5 text-caption text-red-400"
       >
         {state.error}
       </p>

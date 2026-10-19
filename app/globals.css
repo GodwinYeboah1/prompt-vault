@@ -1,16 +1,41 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Dark-only theme: near-black background, dark cards, zinc grays for text
+   and a single gold accent (gold-400). */
+@theme {
+  --color-ink: #0a0a0f;
+  --color-card: #14141c;
+  --color-gold-200: #f0dc9a;
+  --color-gold-300: #e3c45a;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #b8962c;
+
+  /* Type scale. One family (Geist); hierarchy comes from size and weight. */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.04em;
+  --text-display--font-weight: 700;
+  --text-headline: 1.75rem;
+  --text-headline--line-height: 1.2;
+  --text-headline--letter-spacing: -0.02em;
+  --text-headline--font-weight: 600;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.4;
+  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 700;
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.16em;
+  --text-label--font-weight: 500;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --animate-hud-in: hud-in 160ms ease-out;
+  --animate-hud-in: hud-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-fade-in: fade-in 160ms ease-out;
   --animate-shake: shake 360ms ease-in-out;
 }
@@ -50,15 +75,23 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-ink);
+  /* Gold glow behind the header. */
+  background-image: radial-gradient(
+    ellipse 70% 380px at 50% 0,
+    rgb(212 175 55 / 0.08),
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  color: var(--color-zinc-100);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: rgb(212 175 55 / 0.3);
 }

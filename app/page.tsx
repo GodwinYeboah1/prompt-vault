@@ -10,22 +10,22 @@ import { CommandPalette } from "@/app/command-palette";
 
 export default function Home({ searchParams }: PageProps<"/">) {
   return (
-    <main className="flex-1 bg-zinc-950 text-zinc-100">
-      <div className="mx-auto max-w-2xl px-6 py-16">
-        <header className="mb-8 flex items-center justify-between gap-4">
-          <h1 className="font-mono text-3xl font-semibold uppercase tracking-[0.25em] text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">
+    <main className="flex-1 text-zinc-100">
+      <div className="mx-auto max-w-2xl px-5 py-12 sm:px-6 sm:py-20">
+        <header className="mb-10 flex items-center justify-between gap-4 sm:mb-14">
+          <h1 className="text-display text-zinc-50">
             Prompt Vault
           </h1>
           <form action={lock}>
             <button
               type="submit"
-              className="rounded border border-cyan-400/40 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.2em] text-cyan-200 transition hover:border-cyan-300 hover:shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+              className="rounded-full bg-gold-400 px-4 py-2 text-caption font-semibold text-black transition hover:bg-gold-300 hover:shadow-[0_0_24px_rgb(212_175_55/0.55)]"
             >
               Lock
             </button>
           </form>
         </header>
-        <Suspense fallback={<p className="text-zinc-500">Loading prompts…</p>}>
+        <Suspense fallback={<p className="text-body text-zinc-400">Loading prompts…</p>}>
           <Vault searchParams={searchParams} />
         </Suspense>
       </div>
@@ -85,14 +85,14 @@ async function Vault({
       {loadFailed ? (
         <p
           role="alert"
-          className="rounded-lg border border-red-400/50 bg-red-950/30 px-4 py-3 text-red-300 shadow-[0_0_12px_rgba(248,113,113,0.25)]"
+          className="rounded-2xl border border-red-400/30 bg-red-950/20 px-5 py-4 text-body text-red-300"
         >
           Couldn&apos;t connect to the database. Please try again in a moment.
         </p>
       ) : prompts.length === 0 ? (
-        <p className="text-zinc-500">No prompts yet.</p>
+        <p className="py-10 text-center text-body text-zinc-400">No prompts yet.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="space-y-8">
           {prompts.map((prompt) => (
             <PromptCard
               key={prompt.id}

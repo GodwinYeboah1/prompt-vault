@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <main className="flex flex-1 items-center justify-center bg-zinc-950 px-6 py-16 text-zinc-100">
+    <main className="flex flex-1 items-center justify-center px-5 py-12 text-zinc-100 sm:px-6 sm:py-16">
       <UnlockForm />
     </main>
   );

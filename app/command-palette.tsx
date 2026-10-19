@@ -150,10 +150,10 @@ export function CommandPalette({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mb-6 flex w-full items-center justify-between rounded-lg border border-cyan-400/30 bg-zinc-900/40 px-4 py-2.5 text-left text-zinc-500 shadow-[0_0_10px_rgba(34,211,238,0.1)] transition hover:border-cyan-300/60 hover:text-zinc-300 hover:shadow-[0_0_14px_rgba(34,211,238,0.3)]"
+        className="mb-8 flex w-full items-center justify-between rounded-2xl border border-gold-400/20 bg-card py-3.5 pr-3 pl-5 text-left text-body text-zinc-400 transition hover:border-gold-400/40 hover:text-zinc-200 hover:shadow-[0_0_24px_rgb(212_175_55/0.15)]"
       >
         <span>Search prompts…</span>
-        <kbd className="rounded border border-cyan-400/40 px-1.5 py-0.5 font-mono text-xs text-cyan-300">
+        <kbd className="hidden rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-sans text-label tracking-normal text-zinc-400 sm:inline">
           {isMac ? "⌘K" : "Ctrl K"}
         </kbd>
       </button>
@@ -166,9 +166,9 @@ export function CommandPalette({
           if (event.target === event.currentTarget) setOpen(false);
         }}
         aria-label="Search prompts"
-        className="mx-auto mt-[15vh] w-[min(40rem,calc(100%-2rem))] overflow-hidden rounded-xl border border-cyan-300/70 bg-zinc-950/70 p-0 text-zinc-100 shadow-[0_0_40px_rgba(34,211,238,0.35),inset_0_0_30px_rgba(34,211,238,0.08)] backdrop-blur-xl open:animate-hud-in backdrop:bg-zinc-950/50 backdrop:backdrop-blur-sm backdrop:animate-fade-in"
+        className="mx-auto mt-[12vh] w-[min(40rem,calc(100%-2rem))] overflow-hidden rounded-2xl border border-gold-400/30 bg-card p-0 text-zinc-100 shadow-[0_0_48px_rgb(212_175_55/0.15),0_40px_80px_-20px_rgb(0_0_0/0.9)] open:animate-hud-in backdrop:bg-black/60 backdrop:backdrop-blur-sm backdrop:animate-fade-in sm:mt-[15vh]"
       >
-        <div className="border-b border-cyan-400/30 px-4">
+        <div className="border-b border-gold-400/20 px-5">
           <input
             ref={inputRef}
             value={query}
@@ -184,17 +184,17 @@ export function CommandPalette({
             aria-activedescendant={
               active ? `palette-option-${active.id}` : undefined
             }
-            className="w-full bg-transparent py-4 font-mono text-cyan-100 placeholder:text-cyan-100/30 outline-none"
+            className="w-full bg-transparent py-4 text-base text-zinc-100 placeholder:text-zinc-500 outline-none sm:text-lg"
           />
         </div>
 
         {loadFailed ? (
-          <p role="alert" className="px-4 py-6 text-center text-sm text-red-400">
+          <p role="alert" className="px-5 py-8 text-center text-caption text-red-400">
             Couldn&apos;t connect to the database, so there&apos;s nothing to
             search.
           </p>
         ) : results.length === 0 ? (
-          <p className="px-4 py-6 text-center text-sm text-zinc-500">
+          <p className="px-5 py-8 text-center text-caption text-zinc-400">
             {prompts.length === 0 ? "No prompts yet." : "No matching prompts."}
           </p>
         ) : (
@@ -213,34 +213,34 @@ export function CommandPalette({
                   aria-selected={isActive}
                   onMouseMove={() => setActiveIndex(index)}
                   onClick={() => copy(prompt)}
-                  className={`cursor-pointer rounded-lg border px-3 py-2.5 transition ${
+                  className={`cursor-pointer rounded-xl border px-3.5 py-3 transition ${
                     isActive
-                      ? "border-cyan-300/70 bg-cyan-400/10 shadow-[0_0_14px_rgba(34,211,238,0.35)]"
+                      ? "border-gold-400/40 bg-gold-400/[0.08] shadow-[0_0_16px_rgb(212_175_55/0.12)]"
                       : "border-transparent"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="truncate font-medium text-cyan-100">
+                    <span className="truncate font-medium text-zinc-50">
                       {prompt.favorite && (
-                        <span className="mr-1.5 text-amber-300">★</span>
+                        <span className="mr-1.5 text-gold-400">★</span>
                       )}
                       {prompt.title}
                     </span>
                     {copiedId === prompt.id && (
-                      <span className="shrink-0 font-mono text-xs uppercase tracking-[0.2em] text-cyan-300">
+                      <span className="shrink-0 text-label uppercase text-gold-300">
                         Copied!
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 truncate text-sm text-zinc-400">
+                  <p className="mt-0.5 truncate text-caption text-zinc-400">
                     {prompt.body}
                   </p>
                   {prompt.tags && prompt.tags.length > 0 && (
-                    <div className="mt-1.5 flex flex-wrap gap-1">
+                    <div className="mt-2 flex flex-wrap gap-1">
                       {prompt.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded border border-cyan-400/30 px-1.5 font-mono text-[0.7rem] text-cyan-300/80"
+                          className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6875rem] text-zinc-400"
                         >
                           {tag}
                         </span>
@@ -253,9 +253,9 @@ export function CommandPalette({
           </ul>
         )}
 
-        <div className="flex items-center justify-between border-t border-cyan-400/30 px-4 py-2 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-zinc-500">
+        <div className="flex items-center justify-between gap-3 border-t border-gold-400/20 px-5 py-3 text-[0.75rem] text-zinc-500">
           {copyError ? (
-            <span className="normal-case tracking-normal text-red-400">
+            <span className="text-red-400">
               Couldn&apos;t copy to the clipboard. Please try again.
             </span>
           ) : (
